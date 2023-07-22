@@ -1,0 +1,8 @@
+h1 {
+    width: 50%;
+    height: 40px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid gray;
+}
