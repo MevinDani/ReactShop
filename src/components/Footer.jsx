@@ -1,12 +1,13 @@
 import React from 'react'
 import { Facebook, Instagram, Mail, Phone, Pinterest, Room, Twitter } from '@material-ui/icons';
 import { styled } from 'styled-components'
-import { mobile } from '../responsive';
+import { mobile, t600, tab } from '../responsive';
 
 
 const Container = styled.div`
     display:flex;
-    ${mobile({flexDirection:"column"})}
+    ${mobile({flexDirection:"column"})};
+    ${tab({flexDirection:"column"})};
 `;
 
 const Left = styled.div`

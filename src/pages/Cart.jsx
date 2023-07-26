@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { AddOutlined, RemoveOutlined } from '@material-ui/icons';
-import { mobile } from '../responsive';
+import { mobile, t600, tab } from '../responsive';
 
 
 const Container = styled.div``;
@@ -35,7 +35,7 @@ const TopButton = styled.button`
 `;
 
 const TopTexts = styled.div`
-    ${mobile({display:"none"})}
+    ${mobile && tab({display:"none"})}
 `;
 
 const TopText = styled.span`
@@ -47,7 +47,7 @@ const TopText = styled.span`
 const Bottom = styled.div`
     display:flex;
     justify-content:space-between;
-    ${mobile({flexDirection:"column"})}
+    ${mobile && tab({flexDirection:"column"})}
 `;
 
 const Info = styled.div`
@@ -57,7 +57,7 @@ const Info = styled.div`
 const Product = styled.div`
     display:flex;
     justify-content:space-between;
-    ${mobile({flexDirection:"column"})}
+    ${mobile && t600({flexDirection:"column"})}
 `;
 
 const ProductDetail = styled.div`
@@ -114,7 +114,7 @@ const ProductAmount = styled.div`
 const ProductPrice = styled.div`
     font-size:30px;
     font-weight:200;
-    ${mobile({marginBottom:"20px"})}
+    ${mobile && tab({marginBottom:"20px"})}
 `;
 
 const Hr = styled.hr`
@@ -126,7 +126,7 @@ const Summary = styled.div`
     border:0.5px solid lightgray;
     border-radius:10px;
     padding:20px;
-    height:55vh;
+    height:max-content;
 `;
 
 const SummaryTitle = styled.h1`

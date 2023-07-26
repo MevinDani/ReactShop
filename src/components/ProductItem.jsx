@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import {FavoriteBorderOutlined, LocalMallOutlined, SearchOutlined} from '@material-ui/icons'
+import { Link } from 'react-router-dom';
 
 
 const Info = styled.div`
@@ -71,7 +72,9 @@ const ProductItem = ({item}) => {
                 <LocalMallOutlined/>
             </Icon>
             <Icon>
-                <SearchOutlined/>
+                <Link to={`/product/${item._id}`}>
+                    <SearchOutlined/>
+                </Link>
             </Icon>
             <Icon>
                 <FavoriteBorderOutlined/>

@@ -27,17 +27,20 @@ export const categories = [
     {
         id: 1,
         img: "https://i.postimg.cc/bJXjvq4Q/pedram-normohamadian-q4zr9i-IAs-unsplash.jpg",
-        title: "MENS"
+        title: "MENS",
+        cat: "men"
     },
     {
         id: 2,
         img: "https://i.postimg.cc/Y0sRpCs7/navid-sohrabi-IYSe-EOY0-I1w-unsplash.jpg",
-        title: "WOMENS"
+        title: "WOMENS",
+        cat: "women"
     },
     {
         id: 3,
         img: "https://i.postimg.cc/XYphypMT/toufik-tabikh-c-NUC-5z-Fl-Ok-unsplash.jpg",
-        title: "KIDS"
+        title: "KIDS",
+        cat: "kids"
     }
 ]
 
