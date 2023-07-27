@@ -7,7 +7,9 @@ import { AddOutlined, RemoveOutlined } from '@material-ui/icons';
 import { mobile,tab } from '../responsive';
 import { useLocation } from 'react-router-dom';
 import { publicRequest } from '../base_url/urls';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addProduct } from '../redux/cartRedux';
+
 
 
 const Container = styled.div``;
@@ -126,6 +128,7 @@ const SingleProduct = () => {
     const [quantity,setQuantity] = useState(1)
     const [color,setColor] = useState("")
     const [size,setSize] = useState("")
+    const dispatch = useDispatch()
 
     const handleClick = (inp) => {
         if(inp === "rem") {
@@ -135,8 +138,16 @@ const SingleProduct = () => {
         }
     }
 
-    console.log(product)
-    console.log(color,size)
+    const handleCart = () => {
+        // update cart
+        dispatch(
+            addProduct({...product,quantity,color,size,id:product._id})
+        )
+
+    }
+
+    // console.log(product)
+    // console.log(color,size)
 
     useEffect(() => {
         try {
@@ -144,6 +155,8 @@ const SingleProduct = () => {
                 const res = await publicRequest.get(`/products/find/${id}`)
                 console.log(res)
                 setProduct(res.data)
+                setColor(res.data.color[0])
+                setSize(res.data.size[0])
             }
             getProduct()
         } catch (error) {
@@ -188,7 +201,7 @@ const SingleProduct = () => {
                         <Amount>{quantity}</Amount>
                         <AddOutlined onClick={() => handleClick('add')}/>
                     </AmountContainer>
-                    <Button>ADD TO CART</Button>
+                    <Button onClick={handleCart}>ADD TO CART</Button>
                 </AddContainer>
             </InfoContainer>
         </Wrapper>

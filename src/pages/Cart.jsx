@@ -2,8 +2,10 @@ import React from 'react';
 import { styled } from 'styled-components';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { AddOutlined, RemoveOutlined } from '@material-ui/icons';
+import { AddOutlined, Clear, Delete, RemoveOutlined } from '@material-ui/icons';
 import { mobile, t600, tab } from '../responsive';
+import { useDispatch, useSelector } from 'react-redux';
+import { decreaseProduct, deleteProduct, increaseProduct } from '../redux/cartRedux';
 
 
 const Container = styled.div``;
@@ -53,6 +55,7 @@ const Bottom = styled.div`
 const Info = styled.div`
     flex:3;
 `;
+
 
 const Product = styled.div`
     display:flex;
@@ -119,6 +122,7 @@ const ProductPrice = styled.div`
 
 const Hr = styled.hr`
     height:1px;
+    margin-bottom:10px;
 `;
 
 const Summary = styled.div`
@@ -151,9 +155,28 @@ const Button = styled.button`
     background-color:black;
     color:white;
     font-weight:600;
+    cursor:pointer;
 `;
 
 const Cart = () => {
+    const cart = useSelector(state => state.cart)
+    const dispatch = useDispatch()
+    // console.log(cart)
+    const handleRemove = (id) => {
+       dispatch(
+        decreaseProduct({id})
+       )
+    }
+    const handleAdd = (id) => {
+        dispatch(
+            increaseProduct({id})
+        )
+    }
+    const handleDelete = (id,price) => {
+        dispatch(
+            deleteProduct({id,price})
+        )
+    }
   return (
     <Container>
         <Navbar/>
@@ -162,62 +185,47 @@ const Cart = () => {
             <Top>
                 <TopButton>CONTINUE SHOPPING</TopButton>
                 <TopTexts>
-                    <TopText>Shopping Bag(2)</TopText>
+                    <TopText>Shopping Bag({cart.quantity})</TopText>
                     <TopText>Your WishList(0)</TopText>
                 </TopTexts>
                 <TopButton type="filled">CHECK OUT NOW</TopButton>
             </Top>
             <Bottom>
                 <Info>
-                    <Product>
-                        <ProductDetail>
-                            <Image src="https://i.postimg.cc/V6bGW7Xj/pngwing-com-26.png"/>
-                            <Details>
-                                <ProductName><b>Product:</b>DENIM JACKET</ProductName>
-                                <ProductID><b>ProductID:</b>133745612</ProductID>
-                                <ProductColor color='pink'/>
-                                <ProductSize><b>Size:</b>L</ProductSize>
-                            </Details>
-                        </ProductDetail>
-                        <PriceDetail>
-                            <ProductAmountContainer>
-                                <AddOutlined />
-                                <ProductAmount>2</ProductAmount>
-                                <RemoveOutlined />
-                            </ProductAmountContainer>
-                            <ProductPrice>
-                                $ 30
-                            </ProductPrice>
-                        </PriceDetail>
-                    </Product>
-                    <Hr />
-                    <Product>
-                        <ProductDetail>
-                            <Image src="https://i.postimg.cc/V6bGW7Xj/pngwing-com-26.png"/>
-                            <Details>
-                                <ProductName><b>Product:</b>DENIM JACKET</ProductName>
-                                <ProductID><b>ProductID:</b>133745612</ProductID>
-                                <ProductColor color='pink'/>
-                                <ProductSize><b>Size:</b>L</ProductSize>
-                            </Details>
-                        </ProductDetail>
-                        <PriceDetail>
-                            <ProductAmountContainer>
-                                <AddOutlined />
-                                <ProductAmount>2</ProductAmount>
-                                <RemoveOutlined />
-                            </ProductAmountContainer>
-                            <ProductPrice>
-                                $ 30
-                            </ProductPrice>
-                        </PriceDetail>
-                    </Product>
+                    {cart.products.map(product => (
+                        <>
+                            <div style={{display:"flex",justifyContent:"flex-end",marginRight:"10px"}}><Clear onClick={() => handleDelete(product._id,product.price*product.quantity)}/></div>
+                            <Product>
+                                <ProductDetail>
+                                    <Image src={product.img}/>
+                                    <Details>
+                                        <ProductName><b>Product:</b>{product.title}</ProductName>
+                                        <ProductID><b>ProductID:</b>{product._id}</ProductID>
+                                        <ProductColor color={product.color}/>
+                                        <ProductSize><b>Size:</b>{product.size}</ProductSize>
+                                    </Details>
+                                </ProductDetail>
+                                <PriceDetail>
+                                    <ProductAmountContainer>
+                                        <AddOutlined onClick={() => handleAdd(product._id)}/>
+                                        <ProductAmount>{product.quantity}</ProductAmount>
+                                        <RemoveOutlined onClick={()=>handleRemove(product._id)}/>
+                                    </ProductAmountContainer>
+                                    <ProductPrice>
+                                        $ {product.price*product.quantity}
+                                    </ProductPrice>
+                                </PriceDetail>
+                            </Product>
+                            <Hr />
+                        </>
+                        ))}
+                        
                 </Info>
                 <Summary>
                     <SummaryTitle>ORDER SUMMARY</SummaryTitle>
                     <SummaryItem>
                         <SummaryItemText>Subtotal</SummaryItemText>
-                        <SummaryItemPrice>$ 80</SummaryItemPrice>
+                        <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
                     </SummaryItem>
                     <SummaryItem>
                         <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -229,7 +237,7 @@ const Cart = () => {
                     </SummaryItem>
                     <SummaryItem type="total">
                         <SummaryItemText>Total</SummaryItemText>
-                        <SummaryItemPrice>$ 80</SummaryItemPrice>
+                        <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
                     </SummaryItem>
                     <Button>CHECKOUT NOW</Button>
                 </Summary>
