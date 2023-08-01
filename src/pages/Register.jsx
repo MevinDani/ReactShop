@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import { mobile } from '../responsive';
+import { useDispatch, useSelector } from 'react-redux';
+import { userRegister } from '../redux/userRedux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Container = styled.div`
     width:100vw;
@@ -51,22 +55,97 @@ const Button = styled.button`
     cursor:pointer;
 `;
 
+const errorMsg = {
+    color:"red"
+}
+
+const Link =  styled.a`
+    margin:5px 0px;
+    font-size:12px;
+    text-decoration:underline;
+    cursor:pointer;
+`;
+
 const Register = () => {
+
+    const user = useSelector(state => state.user)
+    console.log(user)
+
+    const [values,setValues] = useState({
+        username:"",
+        email:"",
+        password:"",
+        cpass:""
+    })
+
+    const [err,setErr] = useState('')
+
+    const dispatch = useDispatch()
+
+    const navigate = useNavigate()
+
+    const handleRegister = (e) => {
+        e.preventDefault()
+        if(values.username === "") {
+           return setErr('Username cannot be empty') 
+        } else if (values.email === "") {
+            return setErr('Email cannot be empty')
+        } else if (values.password === "") {
+            return setErr('Password cannot be empty')
+        } else if (values.cpass === "") {
+            return setErr('Confirm Password cant be empty')
+        } else if(values.password !== values.cpass) {
+            return setErr('Password and Confirm password are not equal')
+        }
+        setErr('')
+        dispatch(userRegister({...values}))
+            .then((res) => {
+                console.log(res)
+                if(res.type === 'userRegister/rejected') {
+                    toast.error(`${res.payload.response.data.message}`, {
+                        position:"top-center"
+                    })
+                } else if (res.type === 'userRegister/fulfilled') {
+                    navigate('/login')
+                    toast.success('User Successfully registered, now login', {
+                        position:"top-center"
+                    })
+                }
+            })
+            setValues({
+                username:"",
+                email:"",
+                password:"",
+                cpass:""
+            })
+    }
+
   return (
     <Container>
         <Wrapper>
             <Title>CREATE AN ACCOUNT</Title>
+                {user.isFetching?<div style={{width:"100%",textAlign:"center"}}><div class="spinner-border text-info" role="status"></div></div>:""}
             <Form>
-                <Input placeholder="name" />
-                <Input placeholder="last name" />
-                <Input placeholder="username" />
-                <Input placeholder="email" />
-                <Input placeholder="password" />
-                <Input placeholder="confirm password" />
+                <Input placeholder="username" value={values.username}
+                    onChange={(e) => setValues({...values,username:e.target.value})}
+                />
+                <Input placeholder="email" value={values.email}  
+                    onChange={(e) => setValues({...values,email:e.target.value})}
+                />
+                <Input placeholder="password" type='password' value={values.password} 
+                    onChange={(e) => setValues({...values,password:e.target.value})}
+                />
+                <Input placeholder="confirm password" id='cpass' type='password' value={values.cpass} 
+                    onChange={(e) => setValues({...values,cpass:e.target.value})}
+                />
+                <div>
+                    <Input type='file' id='file' placeholder='Set Profile Pic'/>
+                    <div style={errorMsg}>{err}</div>  
+                </div> 
                 <Agreement>
                     By Creating an account, I consent to the processing of my personal data in accordance with the <b>PRIVACY POLICY</b>
                 </Agreement>
-                <Button>CREATE</Button>
+                <Button onClick={handleRegister} disabled={user.isFetching}>CREATE</Button>
             </Form>
         </Wrapper>
     </Container>

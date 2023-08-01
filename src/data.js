@@ -4,21 +4,24 @@ export const sliderItems = [
         img: "https://i.postimg.cc/Pfycb3nG/pngwing-com-9.png",
         title: "SUMMER SALE IS HERE!!",
         desc: "FLAT 30% OFF FOR NEW ARRIVALS",
-        bg: "e3f7fc"
+        bg: "e3f7fc",
+        cat: "men"
     },
     {
         id: 2,
         img: "https://i.postimg.cc/hG0GGt9H/pngwing-com-4.png",
         title: "WOMENS NEW ARRIVALS",
         desc: "FLAT 30% OFF FOR NEW ARRIVALS",
-        bg: "ffedff"
+        bg: "ffedff",
+        cat: "women"
     },
     {
         id: 3,
         img: "https://i.postimg.cc/PqvB63qK/pngwing-com-6.png",
         title: "KIDS NEW ARRIVALS",
         desc: "FLAT 30% OFF FOR NEW ARRIVALS",
-        bg: "d7f5db"
+        bg: "d7f5db",
+        cat: "kids"
     }
 
 ]

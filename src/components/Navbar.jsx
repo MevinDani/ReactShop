@@ -1,10 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import {LocalMallOutlined, Search} from '@material-ui/icons'
+import {AccountCircleOutlined, LocalMallOutlined, Search} from '@material-ui/icons'
 import {Badge} from '@material-ui/core'
 import { mobile, t600 } from '../responsive'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { logout } from '../redux/userRedux'
+import { removeAllCart } from '../redux/cartRedux'
+import { removeAllWish } from '../redux/wishListRedux'
+
 
 const Container = styled.div`
     height:60px;
@@ -61,9 +65,25 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
-    const cart = useSelector(state => state.cart)
+    // const cart = useSelector(state => state.cart)
     const quantity = useSelector(state => state.cart.quantity)
-    console.log(cart)
+    const user = useSelector(state => state.user.currentUser)
+    // console.log(user)
+    // console.log(cart)
+
+    const dispatch = useDispatch()
+
+    const handleLogout = () => {
+        dispatch(
+            logout()
+        )
+        dispatch(
+            removeAllCart()
+        )
+        dispatch(
+            removeAllWish()
+        )
+    }
 
   return (
     <Container>
@@ -76,12 +96,24 @@ const Navbar = () => {
                 </SearchContainer>
             </Left>
             <Center>
-                <Link to='/'><Logo>ESHOP.</Logo></Link>
+                <Link style={{textDecoration:"none"}} to='/'><Logo>ESHOP.</Logo></Link>
             </Center>
             <Right>
-                <Link to='/register'><MenuItem>REGISTER</MenuItem></Link>
-                <Link to='/login'><MenuItem>LOGIN</MenuItem></Link>
-                <Link to='/cart'>
+                {user ? 
+                <>
+                    <Link to='/' style={{textDecoration:"none"}} onClick={handleLogout}><MenuItem>LOGOUT</MenuItem></Link>
+                    <Link to='/userProfile'>
+                        <MenuItem>
+                            <img style={{width:"40px",height:"40px",borderRadius:"40px"}} src={user.profilePic?user.profilePic:'https://i.postimg.cc/htWDLS6P/user-avatar.png'} alt="" />
+                        </MenuItem>
+                    </Link>
+                </> :
+                <>
+                   <Link style={{textDecoration:"none"}} to='/register' hrefLang='/regiter'><MenuItem>REGISTER</MenuItem></Link>
+                    <Link style={{textDecoration:"none"}} to='/login'><MenuItem>LOGIN</MenuItem></Link>
+                </>
+                }
+                <Link style={{textDecoration:"none"}} to='/cart'>
                     <MenuItem>
                         <Badge badgeContent={quantity} color="primary">
                             <LocalMallOutlined/>

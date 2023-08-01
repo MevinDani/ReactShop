@@ -3,6 +3,7 @@ import { styled } from 'styled-components'
 import { mobile } from '../responsive';
 import { login } from '../redux/apicalls';
 import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from '../redux/userRedux';
 
 const Container = styled.div`
     width:100vw;
@@ -70,12 +71,18 @@ const Login = () => {
     const [password,setPassword] = useState('')
 
     const {isFetching,error} = useSelector(state => state.user)
+    const userObj = useSelector(state => state.user)
+    console.log(userObj)
 
     const dispatch = useDispatch()
 
     const handleClick = (e) => {
         e.preventDefault()
-        login(dispatch,{username,password})
+        // login(dispatch,{username,password})
+        dispatch(userLogin({username,password}))
+            .then((res) => {
+                console.log(res)
+            })
     }
   return (
     <Container>
@@ -89,7 +96,7 @@ const Login = () => {
                     onChange={(e)=>setPassword(e.target.value)}
                     type='password'/>
                 <Button onClick={handleClick} disabled={isFetching}>LOGIN</Button>
-                { error && <Error>Something went wrong</Error> }
+                { (error && userObj.currentUser) ? <Error>Something went wrong</Error> : "" }
             <Link>FORGOT PASSWORD?</Link>
             <Link>CREATE NEW ACCOUNT</Link>
             </Form>

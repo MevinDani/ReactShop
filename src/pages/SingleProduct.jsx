@@ -5,11 +5,11 @@ import Footer from '../components/Footer';
 import NewsLetter from '../components/NewsLetter';
 import { AddOutlined, RemoveOutlined } from '@material-ui/icons';
 import { mobile,tab } from '../responsive';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { publicRequest } from '../base_url/urls';
-import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux'
 import { addProduct } from '../redux/cartRedux';
-
+import Review from '../components/Review';
 
 
 const Container = styled.div``;
@@ -122,6 +122,7 @@ const Button = styled.button`
 `
 
 const SingleProduct = () => {
+    
     const location = useLocation()
     const id = location.pathname.split("/")[2]
     const [product,setProduct] = useState({})
@@ -145,6 +146,25 @@ const SingleProduct = () => {
         )
 
     }
+    const ScrollToTop = () => {
+        const navigate = useNavigate();
+      
+        useEffect(() => {
+          const onNavigation = () => {
+            window.scrollTo(0, 0);
+          };
+      
+          // Listen for navigation events
+          navigate(onNavigation);
+      
+          // Cleanup the listener on component unmount
+          return () => {
+            navigate((location) => null);
+          };
+        }, [navigate]);
+      
+        return null;
+    }
 
     // console.log(product)
     // console.log(color,size)
@@ -153,7 +173,7 @@ const SingleProduct = () => {
         try {
             const getProduct = async() => {
                 const res = await publicRequest.get(`/products/find/${id}`)
-                console.log(res)
+                // console.log(res)
                 setProduct(res.data)
                 setColor(res.data.color[0])
                 setSize(res.data.size[0])
@@ -163,6 +183,10 @@ const SingleProduct = () => {
             console.log(error)
         }
     },[id])
+
+    // useEffect(() => {
+    //     ScrollToTop()
+    // },[])
 
   return (
     <Container>
@@ -205,6 +229,10 @@ const SingleProduct = () => {
                 </AddContainer>
             </InfoContainer>
         </Wrapper>
+        <div style={{textAlign:"center",margin:"20px"}}>
+            <span style={{fontWeight:"500",fontSize:"30px",border:"1px solid teal",padding:"10px"}}>Customer Reviews</span>
+        </div>
+        <Review/>
         <NewsLetter />
         <Footer />
     </Container>

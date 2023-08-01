@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
-import {FavoriteBorderOutlined, LocalMallOutlined, SearchOutlined} from '@material-ui/icons'
+import {Favorite, FavoriteBorder, FavoriteBorderOutlined, LocalMallOutlined, SearchOutlined} from '@material-ui/icons'
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProduct } from '../redux/cartRedux';
+import { addRemWish } from '../redux/wishListRedux';
 
 
 const Info = styled.div`
@@ -63,13 +66,46 @@ const Icon = styled.div`
 `;
 
 const ProductItem = ({item}) => {
+    // console.log(item)
+
+    const wish = useSelector(state => state.wish.products)
+    const wishmap = {}
+    wish.map((i) => {
+        wishmap[i._id]=true
+    })
+
+    const [quantity,setQuantity] = useState(1)
+    const [color,setColor] = useState("")
+    const [size,setSize] = useState("")
+
+    const dispatch = useDispatch()
+
+    const handleCart = (item) => {
+        // update cart
+        dispatch(
+            addProduct({...item,quantity,color,size,id:item._id})
+        )
+    }
+
+    const handleWish = (item) => {
+        dispatch(
+            addRemWish({...item,quantity,color,size,id:item._id})
+        )
+    }
+
+    useEffect(() => {
+        setColor(item.color[0])
+        setSize(item.size[0])
+    },[item])
+
+
   return (
     <Container>
         <Circle/>
         <Image src={item.img}/>
         <Info>
             <Icon>
-                <LocalMallOutlined/>
+                <LocalMallOutlined onClick={() => handleCart(item)}/>
             </Icon>
             <Icon>
                 <Link to={`/product/${item._id}`}>
@@ -77,7 +113,10 @@ const ProductItem = ({item}) => {
                 </Link>
             </Icon>
             <Icon>
-                <FavoriteBorderOutlined/>
+                {   wishmap[item._id] ?
+                    <Favorite onClick={() => handleWish(item)}/> :
+                    <FavoriteBorderOutlined onClick={() => handleWish(item)}/>  
+                }
             </Icon>
         </Info>
        

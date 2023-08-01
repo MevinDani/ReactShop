@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { createStore } from 'redux'
 import cartReducer from './cartRedux'
 import userReducer from './userRedux'
+import wishRedux from './wishListRedux'
 import {
     persistStore,
     persistReducer,
@@ -12,11 +13,13 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
+    blacklist: ["reqSuccess"]
 }
 
 const reducer = combineReducers({
     cart: cartReducer,
-    user: userReducer
+    user: userReducer,
+    wish: wishRedux
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

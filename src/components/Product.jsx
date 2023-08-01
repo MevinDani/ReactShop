@@ -13,9 +13,11 @@ const Container = styled.div`
 
 const Product = ({cat,filters,sort}) => {
   // console.log(filters)
-  console.log(sort)
+  // console.log(sort)
   const [product,setProduct] = useState([])
   const [filterproduct,setfilterProduct] = useState([])
+
+  // console.log(product)
 
   useEffect(()=>{
     const getProducts = async() => {
@@ -51,7 +53,7 @@ const Product = ({cat,filters,sort}) => {
       )
     }
   },[sort])
-  console.log(filterproduct,"filter")
+  // console.log(filterproduct,"filter")
   return (
     <Container>
         { cat ?

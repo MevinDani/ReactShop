@@ -133,7 +133,7 @@ const Footer = () => {
             </ContactItem>
             <ContactItem>
                 <Mail style={{marginRight:"10px"}}/>
-                conatct@eshop.com
+                contact@eshop.com
             </ContactItem>
             <Payment/>
         </Right>
