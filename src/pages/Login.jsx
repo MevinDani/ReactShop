@@ -72,7 +72,7 @@ const Login = () => {
 
     const {isFetching,error} = useSelector(state => state.user)
     const userObj = useSelector(state => state.user)
-    console.log(userObj)
+    // console.log(userObj)
 
     const dispatch = useDispatch()
 

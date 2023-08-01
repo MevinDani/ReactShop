@@ -8,7 +8,10 @@ import { decreaseProduct, deleteProduct, increaseProduct } from '../redux/cartRe
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { publicRequest } from '../base_url/urls';
+
 
 const Container = styled.div``;
 
@@ -169,22 +172,54 @@ const Button = styled.button`
 const Cart = () => {
     const cart = useSelector(state => state.cart)
     const wishlist = useSelector(state => state.wish)
+    const user = useSelector(state => state.user)
+    console.log(user,cart)
+    
+    const cartItems = useSelector(state => state.cart.products)
+    if(user.currentUser) {
+        const userId = user.currentUser._id
+    }
     const dispatch = useDispatch()
+
+    const navigate = useNavigate()
 
     const handleRemove = (id) => {
        dispatch(
         decreaseProduct({id})
        )
     }
+
     const handleAdd = (id) => {
         dispatch(
             increaseProduct({id})
         )
     }
+
     const handleDelete = (id,price) => {
         dispatch(
             deleteProduct({id,price})
         )
+    }
+
+    const checkOut = async() => {
+        if(!user.currentUser) {
+            navigate('/login')
+        } else {
+            try {
+                await publicRequest.post('/stripe/create-checkout-session', {
+                    cartItems,
+                    userId:user.currentUser._id
+                }).then((res) => {
+                    if(res.data.url) {
+                        window.location.href = res.data.url
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
   return (
     <Container>
@@ -249,7 +284,7 @@ const Cart = () => {
                         <SummaryItemText>Total</SummaryItemText>
                         <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
                     </SummaryItem>
-                    <Button>CHECKOUT NOW</Button>
+                    <Button onClick={checkOut}>CHECKOUT NOW</Button>
                 </Summary>
             </Bottom>
         </Wrapper>
