@@ -64,9 +64,35 @@ const cartSlice = createSlice({
             state.products = []
             state.quantity = 0
             state.total = 0
+        },
+        addAllFromWish: (state, action) => {
+            // console.log(action.payload)
+            action.payload.map((item) => {
+                console.log(item)
+                const existingProductIndex = state.products.findIndex(
+                    (product) => product._id === item.id
+                );
+
+                if (existingProductIndex !== -1) {
+                    // If the product already exists in the cart, update its quantity
+                    state.products[existingProductIndex].quantity += item.quantity;
+                    state.total += item.price * item.quantity;
+                    toast.success("Product is added to cart", {
+                        position: "top-center"
+                    })
+                } else {
+                    // If the product does not exist in the cart, add it as a new entry
+                    state.quantity += 1;
+                    state.products.push(item);
+                    state.total += item.price * item.quantity;
+                    toast.success("Product is added to cart", {
+                        position: "top-center"
+                    })
+                }
+            })
         }
     }
 })
 
-export const { addProduct, decreaseProduct, increaseProduct, deleteProduct, removeAllCart } = cartSlice.actions;
+export const { addProduct, decreaseProduct, increaseProduct, deleteProduct, removeAllCart, addAllFromWish } = cartSlice.actions;
 export default cartSlice.reducer;

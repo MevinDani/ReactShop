@@ -12,7 +12,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import Order from './Order';
 import { Link } from 'react-router-dom';
 import { publicRequest } from '../base_url/urls';
-import { addProduct } from '../redux/cartRedux';
+import { addAllFromWish, addProduct } from '../redux/cartRedux';
 
 // const UserProfile = () => {
 //     const user = useSelector(state => state.user.currentUser)
@@ -363,7 +363,7 @@ const Cart = () => {
 
     // const strData = []
 
-    // console.log(wishlist)
+    console.log("wshlst",wishlist)
 
     const dispatch = useDispatch()
 
@@ -395,6 +395,13 @@ const Cart = () => {
         console.log(product)
         dispatch(
             addProduct({...product})
+        )
+    }
+
+    const handleAllWish = (wishProd) => {
+        console.log("wshProd",wishProd)
+        dispatch(
+            addAllFromWish(wishProd)
         )
     }
 
@@ -482,7 +489,7 @@ const Cart = () => {
                         <SummaryItemText>Total</SummaryItemText>
                         <SummaryItemPrice>$ {wishlist.total}</SummaryItemPrice>
                     </SummaryItem>
-                    <Button>ADD TO CART</Button>
+                    <Button onClick={() => handleAllWish(wishlist.products)}>ADD TO CART</Button>
                 </Summary>) : 
                 
                 <>
