@@ -15,6 +15,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 import ScrolltoTop from './components/ScrolltoTop'
 import UpdateProf from './components/UpdateProf'
+import ReviewForm from './components/ReviewForm'
 
 
 const App = () => {
@@ -33,6 +34,8 @@ const App = () => {
       <Route path='/update/:id' element={user ? <UpdateProf /> : <Login />}></Route>
       <Route path='/login' element={user ? <Home /> : <Login />}></Route>
       <Route path='/register' element={user ? <Home /> : <Register />}></Route>
+
+      <Route path='/review/:id' element={<ReviewForm />}></Route>
 
       <Route path='/pay' element={<Pay />}></Route>
       <Route path='/checkout_success' element={<Success />}></Route>

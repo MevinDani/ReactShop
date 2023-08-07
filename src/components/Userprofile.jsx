@@ -11,6 +11,8 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import Order from './Order';
 import { Link } from 'react-router-dom';
+import { publicRequest } from '../base_url/urls';
+import { addProduct } from '../redux/cartRedux';
 
 // const UserProfile = () => {
 //     const user = useSelector(state => state.user.currentUser)
@@ -353,7 +355,13 @@ const Cart = () => {
     const user = useSelector(state => state.user.currentUser)
     const wishlist = useSelector(state => state.wish)
 
+    // const token = JSON.parse(localStorage.getItem('token'))
+
     const [show,setShow] = useState(true)
+
+    // const [sdata,setSdata] = useState([])
+
+    // const strData = []
 
     // console.log(wishlist)
 
@@ -379,9 +387,17 @@ const Cart = () => {
         setShow(true)
     }
 
-    const handleOrderShow = () => {
+    const handleOrderShow = async() => {
         setShow(false)
     }
+
+    const handleAddCart = (product) => {
+        console.log(product)
+        dispatch(
+            addProduct({...product})
+        )
+    }
+
 
   return (
     <Container>
@@ -441,6 +457,7 @@ const Cart = () => {
                                     <ProductPrice>
                                         $ {product.price*product.quantity}
                                     </ProductPrice>
+                                    <Button onClick={()=>handleAddCart(product)}>ADD TO CART</Button>
                                 </PriceDetail>
                             </Product>
                         </>
