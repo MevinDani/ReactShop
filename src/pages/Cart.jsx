@@ -173,7 +173,7 @@ const Cart = () => {
     const cart = useSelector(state => state.cart)
     const wishlist = useSelector(state => state.wish)
     const user = useSelector(state => state.user)
-    console.log(user,cart)
+    // console.log(user,cart)
     
     const cartItems = useSelector(state => state.cart.products)
     if(user.currentUser) {

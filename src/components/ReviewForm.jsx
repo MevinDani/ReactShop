@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { publicRequest } from '../base_url/urls'
 import Rating from 'material-ui-rating'
-
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const container = {
     backgroundColor:"teal",
@@ -27,7 +28,8 @@ const itemCont = {
     justifyContent:"space-evenly",
     padding:"5px",
     backgroundColor:"#fbeadd",
-    marginBottom:"10px"
+    marginBottom:"10px",
+    height:"150px"
 }
 
 const star = {
@@ -47,12 +49,16 @@ const reviewCont = {
 }
 
 const img = {
-    width:"100px",
-    height:"100px",
+    width:"150px",
+    height:"150px",
     flex:"1"
 }
 
 const ReviewForm = () => {
+
+    const user = useSelector(state => state.user.currentUser)
+
+    const navigate = useNavigate()
 
     const params = useParams()
     const productId = params.id
@@ -61,6 +67,9 @@ const ReviewForm = () => {
     const [rating,setRating] = useState(0)
     const [revText,setRevText] = useState('')
     const [rateImg,setRateImg] = useState('')
+
+    const token = JSON.parse(localStorage.getItem('token'))
+
     
     useEffect(() => {
         const getProduct = async() => {
@@ -89,7 +98,36 @@ const ReviewForm = () => {
         }
     }
 
-   console.log(rating,revText,rateImg)
+    const reqBody = {
+        content:revText,
+        rating,
+        userId:user._id,
+        name:user.username
+    }
+
+    const addReview = async() => {
+        try {
+            const res = await publicRequest.post(`/products/${productId}/review/${user._id}`, reqBody, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }, 
+            })
+            if(res.status === 200) {
+                console.log(res)
+                toast.success('Review added successfully', {
+                    position:'top-center'
+                })
+                setRating(0)
+                setRevText('')
+                navigate(`/product/${productId}`)
+            } else {
+                console.log("some error occured")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
   return (
     <>
@@ -99,14 +137,14 @@ const ReviewForm = () => {
                 <h3 style={{width:"100%",textAlign:"center"}}>Write a Review</h3>
                 <div style={itemCont}>
                     <img style={img} src={prod?prod.img:""} alt="" />
-                    <h6 style={{flex:"2"}}>{prod?prod.desc:""}</h6>
+                    <h5 style={{flex:"2"}}>{prod?prod.desc:""}</h5>
                 </div>
                 <div style={star}>
                     <h5>Choose a Rating</h5>
                     <Rating max={5} value={rating} onChange={(value) => setRating(value)} />
                 </div>
                 <hr />
-                <h5 style={{width:"100%",textAlign:"center"}}>Add Photo</h5>
+                {/* <h5 style={{width:"100%",textAlign:"center"}}>Add Photo</h5>
                 <div style={addPhotoCont}>
                     <div>
                         <input type="file" onChange={setImage} />
@@ -118,8 +156,7 @@ const ReviewForm = () => {
                         </div>
                         : ""
                     }
-                </div>
-                <hr />
+                </div> */}
                 <div style={reviewCont}>
                     <h5 style={{width:"100%",textAlign:"center"}}>Write your Review</h5>
                     <div style={{width:"100%",textAlign:"center"}}>
@@ -127,7 +164,7 @@ const ReviewForm = () => {
                     </div>
                 </div>
                 <div style={{width:"100%",textAlign:"center"}}>
-                    <button style={{width:"70%",backgroundColor:"teal",border:"none",color:"white",borderRadius:"12px"}}>Submit Review</button>
+                    <button onClick={addReview} style={{width:"70%",backgroundColor:"teal",border:"none",color:"white",borderRadius:"12px"}}>Submit Review</button>
                 </div>
             </div>
         </div>
