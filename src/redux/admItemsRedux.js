@@ -26,6 +26,23 @@ export const productUpdate = createAsyncThunk("productUpdate", async (data, { re
     }
 })
 
+export const createProduct = createAsyncThunk("createProduct", async (data, { rejectedValue }) => {
+    console.log(data)
+    const token = data.token
+    try {
+        const response = await publicRequest.post('/products/create', data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        console.log("crtPrd", response.data)
+        return response.data
+    } catch (error) {
+        console.log(error)
+        return rejectedValue(error)
+    }
+})
+
 
 const admItemSlice = createSlice({
     name: "items",
@@ -33,7 +50,8 @@ const admItemSlice = createSlice({
         list: [],
         isFetching: false,
         error: false,
-        editStatus: ""
+        editStatus: "",
+        createStatus: ""
     },
     extraReducers: {
         // itemsFetch
@@ -67,6 +85,20 @@ const admItemSlice = createSlice({
         },
         [productUpdate.rejected]: (state, action) => {
             state.editStatus = 'rejected'
+        },
+        // createProduct
+        [createProduct.pending]: (state, action) => {
+            state.createStatus = 'pending'
+        },
+        [createProduct.fulfilled]: (state, action) => {
+            state.createStatus = 'success'
+            state.list.push(action.payload)
+            toast.success('New Product added successfully', {
+                position: "top-center"
+            })
+        },
+        [createProduct.rejected]: (state, action) => {
+            state.createStatus = 'rejected'
         }
     }
 })

@@ -7,11 +7,14 @@ import styled from 'styled-components'
 import { publicRequest } from '../base_url/urls';
 import { useNavigate } from 'react-router-dom';
 import EditProduct from './EditProduct';
+import CreateProduct from './CreateProduct';
 
 const wrapper = {
     width:"100%",
     display:"flex",
+    flexDirection:"column",
     justifyContent:"center",
+    alignItems:"center",
     marginTop:"20px"
 }
 
@@ -38,6 +41,23 @@ const View = styled.button`
 
 const Edit = styled.button`
     background-color: rgb(32, 177, 255);   
+`
+const Create = styled.div`
+    width:80%;
+    display:flex;
+    justify-content:space-evenly;
+    margin:10px;
+`
+const Title = styled.h3`
+       
+`
+const CreateButton = styled.button`
+    background-color: rgb(111, 119, 214);  
+    border:none;
+    color:white; 
+    &:hover{
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px
+    }
 `
 
 export default function AdminStore() {
@@ -109,8 +129,7 @@ export default function AdminStore() {
                     <Delete onClick={() => handleDelete(params.row.id)}>Delete</Delete>
                     <EditProduct prodId={params.row.id}/>
                     <View onClick={() => navigate(`/admin/product/${params.row.id}`)}>View</View>
-                </Action>
-               
+                </Action>  
             )
         }
         },
@@ -120,6 +139,11 @@ export default function AdminStore() {
     <>
         <Navbar/>
             <div style={wrapper}>
+                <Create>
+                    <Title>Product</Title>
+                    <CreateProduct/>
+                </Create>
+               
                 <div style={{ height: 400, width: '90%', boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}}>
                   <DataGrid
                     rows={rows}
