@@ -16,6 +16,12 @@ import "react-toastify/dist/ReactToastify.css"
 import ScrolltoTop from './components/ScrolltoTop'
 import UpdateProf from './components/UpdateProf'
 import ReviewForm from './components/ReviewForm'
+import AdminLogin from './admin/AdminLogin'
+import AdminStore from './admin/AdminStore'
+import AdminUser from './admin/AdminUser'
+import AdminHome from './admin/AdminHome'
+import ViewProduct from './admin/ViewProduct'
+import EditProduct from './admin/EditProduct'
 
 
 const App = () => {
@@ -36,6 +42,35 @@ const App = () => {
       <Route path='/register' element={user ? <Home /> : <Register />}></Route>
 
       <Route path='/review/:id' element={<ReviewForm />}></Route>
+
+      {
+        user && user.isAdmin == false ?
+          <>
+            <Route path='/admin/login' element={<Home />}></Route>
+          </>
+          : ""
+      }
+
+      {
+        !user ?
+          <>
+            <Route path='/admin/login' element={<AdminLogin />}></Route>
+          </>
+          : ""
+      }
+
+      {
+        user ?
+          <>
+            <Route path='/admin/login' element={user.isAdmin ? <AdminHome /> : <AdminLogin />}></Route>
+            <Route path='/admin/home' element={user.isAdmin ? <AdminHome /> : <Home />}></Route>
+            <Route path='/admin/products' element={user.isAdmin ? <AdminStore /> : <Home />}></Route>
+            <Route path='/admin/user' element={user.isAdmin ? <AdminUser /> : <Home />}></Route>
+            <Route path='/admin/product/:id' element={user.isAdmin ? <ViewProduct /> : <Home />}></Route>
+            <Route path='/admin/product/edit/:id' element={user.isAdmin ? <EditProduct /> : <Home />}></Route>
+          </> : ""
+      }
+
 
       <Route path='/pay' element={<Pay />}></Route>
       <Route path='/checkout_success' element={<Success />}></Route>

@@ -363,7 +363,7 @@ const Cart = () => {
 
     // const strData = []
 
-    console.log("wshlst",wishlist)
+    // console.log("wshlst",wishlist)
 
     const dispatch = useDispatch()
 

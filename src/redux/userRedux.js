@@ -128,44 +128,7 @@ const userSlice = createSlice({
             console.log(action.payload)
         });
     }
-    ,
-    // extraReducers: {
-    //     [userLogin.pending]: (state) => {
-    //         state.isFetching = true
-    //     },
-    //     [userLogin.fulfilled]: (state, action) => {
-    //         state.isFetching = false;
-    //         state.error = false;
-    //         state.currentUser = action.payload;
-    //         localStorage.setItem('token', JSON.stringify(action.payload.accessToken))
-    //         toast.success(`welcome ${state.currentUser.username}`, {
-    //             position: "top-center"
-    //         })
-    //     },
-    //     [userLogin.rejected]: (state, action) => {
-    //         state.isFetching = false;
-    //         state.error = true
-    //     },
-    //     // user update
-    //     [userUpdate.pending]: (state) => {
-    //         state.isFetching = true
-    //     },
-    //     [userUpdate.fulfilled]: (state, action) => {
-    //         state.isFetching = false;
-    //         state.error = false;
-    //         state.currentUser = action.payload.data;
-    //         toast.success(`User Profile have been updated`, {
-    //             position: "top-center"
-    //         })
-    //         // window.location.href = '/userProfile'
-    //     },
-    //     [userUpdate.rejected]: (state, action) => {
-    //         state.isFetching = false;
-    //         state.error = true
-    //         console.log(action.payload)
-    //     },
 
-    // }
 })
 
 export const { loginStart, loginSuccess, loginFailure, logout } = userSlice.actions;

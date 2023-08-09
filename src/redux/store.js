@@ -3,6 +3,7 @@ import { createStore } from 'redux'
 import cartReducer from './cartRedux'
 import userReducer from './userRedux'
 import wishRedux from './wishListRedux'
+import admItemsRedux from './admItemsRedux'
 import {
     persistStore,
     persistReducer,
@@ -19,7 +20,8 @@ const persistConfig = {
 const reducer = combineReducers({
     cart: cartReducer,
     user: userReducer,
-    wish: wishRedux
+    wish: wishRedux,
+    items: admItemsRedux
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)
