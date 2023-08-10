@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import { AddOutlined, Clear, Delete, RemoveOutlined } from '@material-ui/icons';
 import { mobile, t600, tab } from '../responsive';
 import { useDispatch, useSelector } from 'react-redux';
-import { decreaseWish, deleteWish, increaseWish } from '../redux/wishListRedux';
+import { decreaseWish, deleteWish, increaseWish, removeAllWish } from '../redux/wishListRedux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -407,12 +407,18 @@ const Cart = () => {
         dispatch(
             addProduct({...product})
         )
+        dispatch(
+            deleteWish({...product})
+        )
     }
 
     const handleAllWish = (wishProd) => {
         console.log("wshProd",wishProd)
         dispatch(
             addAllFromWish(wishProd)
+        )
+        dispatch(
+            removeAllWish()
         )
     }
 

@@ -66,6 +66,16 @@ const Link =  styled.a`
     cursor:pointer;
 `;
 
+const imgC = {
+    width:"100%",
+    textAlign:"center"
+}
+
+const img = {
+    width:"80px",
+    height:"80px"
+}
+
 const Register = () => {
 
     const user = useSelector(state => state.user)
@@ -77,12 +87,33 @@ const Register = () => {
         password:"",
         cpass:""
     })
+    const [profilePic,setProfilePic] = useState('')
+
 
     const [err,setErr] = useState('')
 
     const dispatch = useDispatch()
 
     const navigate = useNavigate()
+
+    const setImage = (e) => {
+        // console.log(e.target.files[0]);
+        const file = e.target.files[0]
+        TransformFile(file)
+        // setProfilePic(e.target.files[0])
+    }
+
+    const TransformFile = (file) => {
+        const reader = new FileReader()
+        if(file) {
+            reader.readAsDataURL(file)
+            reader.onloadend = () => {
+                setProfilePic(reader.result)
+            }
+        } else {
+            setProfilePic('')
+        }
+    }
 
     const handleRegister = (e) => {
         e.preventDefault()
@@ -98,13 +129,14 @@ const Register = () => {
             return setErr('Password and Confirm password are not equal')
         }
         setErr('')
-        dispatch(userRegister({...values}))
+        dispatch(userRegister({...values,profilePic}))
             .then((res) => {
                 console.log(res)
                 if(res.type === 'userRegister/rejected') {
                     toast.error(`${res.payload.response.data.message}`, {
                         position:"top-center"
                     })
+                    setErr(res.payload.response.data.message)
                 } else if (res.type === 'userRegister/fulfilled') {
                     navigate('/login')
                     toast.success('User Successfully registered, now login', {
@@ -116,7 +148,8 @@ const Register = () => {
                 username:"",
                 email:"",
                 password:"",
-                cpass:""
+                cpass:"",
+                profilePic:""
             })
     }
 
@@ -139,9 +172,18 @@ const Register = () => {
                     onChange={(e) => setValues({...values,cpass:e.target.value})}
                 />
                 <div>
-                    <Input type='file' id='file' placeholder='Set Profile Pic'/>
+                    <Input type='file' id='file' placeholder='Set Profile Pic' onChange={setImage}/>
                     <div style={errorMsg}>{err}</div>  
-                </div> 
+                </div>
+                {
+                    profilePic ? 
+                        <div style={imgC}>
+                                <img 
+                                    style={img} 
+                                    src={profilePic} 
+                                />
+                        </div> : ""
+                } 
                 <Agreement>
                     By Creating an account, I consent to the processing of my personal data in accordance with the <b>PRIVACY POLICY</b>
                 </Agreement>

@@ -116,7 +116,7 @@ export default function OrderList() {
                         params.row.dStatus !== 'delivered' ? 
                         <>
                             <DispatchBtn onClick={()=>handleOrderDispatch(params.row.id)}>Dispatch</DispatchBtn>
-                            <DeliveryBtn onClick={()=>handleOrderDeliver(params.row.id)}>Delivered</DeliveryBtn>
+                            {/* <DeliveryBtn onClick={()=>handleOrderDeliver(params.row.id)}>Delivered</DeliveryBtn> */}
                         </> : ""
                     }
                     <Views onClick={()=>navigate(`/admin/orders/${params.row.id}`)}>View</Views>

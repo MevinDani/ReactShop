@@ -53,7 +53,7 @@ const ViewOrder = () => {
                             "error" }
                         </p>
 
-                        <h2>Order Details</h2>
+                        <h2>Payment Details</h2>
                         <p>
                             <Delivered>{order.payment_status}</Delivered>
                         </p>

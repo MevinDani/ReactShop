@@ -75,7 +75,7 @@ export default function AdminStore() {
         dispatch(
             itemsFetch()
         )
-    },[])
+    },[dispatch])
 
     const handleDelete = async(id) => {
         const res = await publicRequest.delete(`/products/${id}`, {

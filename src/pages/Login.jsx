@@ -4,6 +4,7 @@ import { mobile } from '../responsive';
 import { login } from '../redux/apicalls';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from '../redux/userRedux';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     width:100vw;
@@ -74,6 +75,8 @@ const Login = () => {
     const userObj = useSelector(state => state.user)
     // console.log(userObj)
 
+    const navigate = useNavigate()
+
     const dispatch = useDispatch()
 
     const handleClick = (e) => {
@@ -97,8 +100,7 @@ const Login = () => {
                     type='password'/>
                 <Button onClick={handleClick} disabled={isFetching}>LOGIN</Button>
                 { (error && userObj.currentUser) ? <Error>Something went wrong</Error> : "" }
-            <Link>FORGOT PASSWORD?</Link>
-            <Link>CREATE NEW ACCOUNT</Link>
+            <Link onClick={() => navigate('/register')}>CREATE NEW ACCOUNT</Link>
             </Form>
       </Wrapper>
     </Container>

@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { removeAllCart } from '../redux/cartRedux'
 
 const wrapper = {
   display:"flex",
@@ -25,18 +27,26 @@ const go = {
   padding:"5px",
   backgroundColor:"#ff95b4",
   borderRadius:"4px",
-  cursor:"pointer"
+  cursor:"pointer",
+  color:"black"
 }
 
 
 const Success = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(
+      removeAllCart()
+    )
+  },[dispatch])
   return (
     <>
     <Navbar/>
       <div style={wrapper}>
         <div style={container}>
-          <p style={{color:"blue"}}>Successfull Transaction!</p>
-          <span style={{color:"blue"}}>Thank you for buying!</span>
+          <p style={{color:"blue",fontSize:"24px"}}>Successfull Transaction!</p>
+          <span style={{color:"blue",fontSize:"20px"}}>Thank you for buying!</span>
           <Link to={'/userProfile'} style={{textDecoration:"none",marginTop:"10px"}}><span style={go}>Go to User Profile</span></Link>
         </div>
       </div>
