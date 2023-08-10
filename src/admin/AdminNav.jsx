@@ -4,7 +4,7 @@ import {AccountCircleOutlined, LocalMallOutlined, Search} from '@material-ui/ico
 import {Badge} from '@material-ui/core'
 import { mobile, t600 } from '../responsive'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { logout } from '../redux/userRedux'
 import { removeAllCart } from '../redux/cartRedux'
 import { removeAllWish } from '../redux/wishListRedux'
@@ -30,7 +30,7 @@ const SearchContainer = styled.div`
     display:flex;
     align-items:center;
     margin-left:25px;
-    padding:5px
+    padding:5px;
 `;
 const Input = styled.input`
     border:none;
@@ -71,6 +71,8 @@ const Navbar = () => {
     // console.log(user)
     // console.log(cart)
 
+    const navigate = useNavigate()
+
     const dispatch = useDispatch()
 
     const handleLogout = () => {
@@ -88,7 +90,7 @@ const Navbar = () => {
   return (
     <Container>
         <Wrapper>
-            <Left>
+            <Left onClick={()=>navigate('/admin/home')}>
                 <Language>Admin Panel</Language>
             </Left>
             <Center>

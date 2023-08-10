@@ -8,7 +8,7 @@ import { publicRequest } from '../base_url/urls';
 import { useNavigate } from 'react-router-dom';
 import EditProduct from './EditProduct';
 import CreateProduct from './CreateProduct';
-import { ordersFetch } from '../redux/orderRedux';
+import { ordersEdit, ordersFetch } from '../redux/orderRedux';
 import moment from 'moment'
 
 
@@ -40,6 +40,26 @@ export default function OrderList() {
         console.log(res.data)
         dispatch(
             itemsFetch()
+        )
+    }
+
+    const handleOrderDispatch = (id) => {
+        dispatch(
+            ordersEdit({
+                id,
+                token,
+                delivery_status:"dispatched"
+            })
+        )
+    }
+
+    const handleOrderDeliver = (id) => {
+        dispatch(
+            ordersEdit({
+                id,
+                token,
+                delivery_status:"delivered"
+            })
         )
     }
 
@@ -92,9 +112,14 @@ export default function OrderList() {
           renderCell: (params) => {
             return (
                 <Action>
-                    <DispatchBtn>Dispatch</DispatchBtn>
-                    <DeliveryBtn>Delivered</DeliveryBtn>
-                    <Views>View</Views>
+                    {
+                        params.row.dStatus !== 'delivered' ? 
+                        <>
+                            <DispatchBtn onClick={()=>handleOrderDispatch(params.row.id)}>Dispatch</DispatchBtn>
+                            <DeliveryBtn onClick={()=>handleOrderDeliver(params.row.id)}>Delivered</DeliveryBtn>
+                        </> : ""
+                    }
+                    <Views onClick={()=>navigate(`/admin/orders/${params.row.id}`)}>View</Views>
                 </Action>  
             )
         }

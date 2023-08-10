@@ -24,6 +24,7 @@ import ViewProduct from './admin/ViewProduct'
 import EditProduct from './admin/EditProduct'
 import CreateProduct from './admin/CreateProduct'
 import OrderList from './admin/OrderList'
+import ViewOrder from './admin/ViewOrder'
 
 
 const App = () => {
@@ -72,6 +73,7 @@ const App = () => {
             <Route path='/admin/product/edit/:id' element={user.isAdmin ? <EditProduct /> : <Home />}></Route>
             <Route path='/admin/product/create' element={user.isAdmin ? <CreateProduct /> : <Home />}></Route>
             <Route path='/admin/orders' element={user.isAdmin ? <OrderList /> : <Home />}></Route>
+            <Route path='/admin/orders/:id' element={user.isAdmin ? <ViewOrder /> : <Home />}></Route>
           </> : ""
       }
 

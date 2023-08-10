@@ -199,7 +199,7 @@ const ProductColor = styled.div`
     width:20px;
     height:20px;
     border-radius:50%;
-    background-color:${props => props.color}
+    background-color:${props => props.color};
 `;
 
 const ProductSize = styled.span``;
@@ -312,6 +312,17 @@ backgroundColor:"orange",
 marginTop:"10px",
 margin:"10px 10px"
 }
+
+const adminHome = {
+    padding:"10px",
+    fontWeight:"400",
+    cursor:"pointer",
+    border:"0.5px solid black",
+    color: "white",
+    backgroundColor:"#5184ff",
+    marginTop:"10px",
+    margin:"10px 10px"
+    }
 
 const wishBtn = {
     padding:"10px",
@@ -426,7 +437,14 @@ const Cart = () => {
                         {/* Add more user details rendering here */}
                     </div>
                 </div>
-                <Link to={`/update/${user._id}`}><button style={updateProfBtn}>Update Profile</button></Link>
+                <div>
+                    <Link to={`/update/${user._id}`}><button style={updateProfBtn}>Update Profile</button></Link>
+                    {
+                        user.isAdmin ?
+                        <Link to={'/admin/home'}><button style={adminHome}>Admin Panel</button></Link>
+                        : ""
+                    }
+                </div>
                 <div style={userButtons}>
                     <button style={wishBtn} onClick={handleWishShow}>WishList</button>
                     <button style={orderBtn} onClick={handleOrderShow}>Your Orders</button>

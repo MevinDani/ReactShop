@@ -16,6 +16,31 @@ export const ordersFetch = createAsyncThunk("ordersFetch", async (data, { reject
     }
 })
 
+export const ordersEdit = createAsyncThunk("ordersEdit", async (values, { getState }) => {
+    const state = getState()
+
+    let currentOrder = state.orders.orders.filter(
+        (order) => order._id === values.id
+    )
+
+    const newOrder = {
+        ...currentOrder[0],
+        delivery_status: values.delivery_status
+    }
+
+    try {
+        const response = await publicRequest.put(`/orders/${values.id}`, newOrder, {
+            headers: {
+                Authorization: `Bearer ${values.token}`
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
 
 const orderRedux = createSlice({
     name: "orders",
@@ -42,6 +67,19 @@ const orderRedux = createSlice({
             state.error = true
             console.log("itemsFetchError", action.payload)
         },
+        [ordersEdit.pending]: (state, action) => {
+            state.editStatus = 'pending'
+        },
+        [ordersEdit.fulfilled]: (state, action) => {
+            const updatedOrders = state.orders.map((order) =>
+                order._id === action.payload._id ? action.payload : order
+            )
+            state.orders = updatedOrders
+            state.editStatus = 'success'
+        },
+        [ordersEdit.rejected]: (state, action) => {
+            state.editStatus = 'rejected'
+        }
         // update Product
         // [productUpdate.pending]: (state, action) => {
         //     state.editStatus = 'pending'
